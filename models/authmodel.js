@@ -15,7 +15,7 @@ const crypto = require("crypto");
       return { code: -2, msg: "Invalid email address" };
     }
 
-    const db = getDB();
+    const db = await getDB();
     const users = db.collection("users");
 
     let finduser = await users.findOne({ email });
@@ -59,7 +59,7 @@ const crypto = require("crypto");
       return { code: -2, msg: "Invalid email address" };
     }
 
-    const db = getDB();
+    const db = await getDB();
     const users = db.collection("users");
 
     let user = await users.findOne({ email });
