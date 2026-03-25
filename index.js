@@ -3,6 +3,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
+const fs = require("fs");
 const { connectDB } = require("./db");
 
 const app = express();
@@ -15,7 +16,7 @@ app.use(
       "https://inquisitive-bonbon-f30eec.netlify.app",
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  }),
+  })
 );
 
 app.use(express.json());
@@ -35,24 +36,30 @@ app.get("/image/uploads/:id", (req, res) => {
 
   return res.sendFile(filePath);
 });
-app.use("/", require("./routes/auth"));
-app.use("/", require("./routes/post"));
-app.use("/", require("./routes/getuser"));
 
-app.get("/", (req, res) => {
-  res.send("API running  ");
-});
+async function startServer() {
+  try {
+    await connectDB(); 
+    console.log(" DATABASE CONNECTED");
 
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-});
+    app.use("/", require("./routes/auth"));
+    app.use("/", require("./routes/post"));
+    app.use("/", require("./routes/getuser"));
 
-connectDB()
-  .then(() => console.log("  DATABASE CONNECTED"))
-  .catch((err) => {
-    console.error("❌ DB ERROR:", err);
+    app.get("/", (req, res) => {
+      res.send("API running");
+    });
+
+    app.listen(PORT, () => {
+      console.log(` Server running on port ${PORT}`);
+    });
+  } catch (err) {
+    console.error(" DB ERROR:", err);
     process.exit(1);
-  });
+  }
+}
+
+startServer();
 
 process.on("uncaughtException", (err) => {
   console.error("UNCAUGHT EXCEPTION:", err);
