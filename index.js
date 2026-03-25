@@ -4,7 +4,8 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const { connectDB } = require("./db");
-
+const fs = require("fs");
+const path = require("path");
 const app = express();
 
 const PORT = process.env.PORT || 5000;
@@ -24,7 +25,6 @@ app.use(
 
 app.use(express.json());
 
-app.use("/image/uploads", express.static(path.join(__dirname, "uploads")));
 
 connectDB()
   .then(() => {
@@ -33,7 +33,21 @@ connectDB()
     app.use("/", require("./routes/auth"));
     app.use("/", require("./routes/post"));
     app.use("/", require("./routes/getuser"));
+app.get("/image/uploads/:id", (req, res) => {
+  const { id } = req.params;
 
+  if (!id) {
+    return res.status(400).send("image not found");
+  }
+
+  const filePath = path.join(__dirname, "uploads", id);
+
+  if (!fs.existsSync(filePath)) {
+    return res.status(404).send("image url not found");
+  }
+
+  return res.sendFile(filePath);
+});
     app.get("/", (req, res) => {
       res.send("serving running test command ");
     });
