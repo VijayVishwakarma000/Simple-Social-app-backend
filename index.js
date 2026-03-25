@@ -8,10 +8,11 @@ const path = require("path");
 const app = express();
 
 app.use(cors({
-    origin: ["https://inquisitive-bonbon-f30eec.netlify.app/"],
+    origin: ["https://inquisitive-bonbon-f30eec.netlify.app",'http://localhost:5173'],
     methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
+    credentials: false,
   }));
+app.options("*", cors());
 app.use(express.json());
 
 const PORT = process.env.PORT || 5000;
