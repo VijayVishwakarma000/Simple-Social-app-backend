@@ -39,9 +39,6 @@ app.get("/image/uploads/:id", (req, res) => {
 
 async function startServer() {
   try {
-    await connectDB(); 
-    console.log(" DATABASE CONNECTED");
-
     app.use("/", require("./routes/auth"));
     app.use("/", require("./routes/post"));
     app.use("/", require("./routes/getuser"));
@@ -51,11 +48,15 @@ async function startServer() {
     });
 
     app.listen(PORT, () => {
-      console.log(` Server running on port ${PORT}`);
+      console.log(`  Server running on port ${PORT}`);
     });
+
+    connectDB()
+      .then(() => console.log("  DATABASE CONNECTED"))
+      .catch((err) => console.error("❌ DB ERROR:", err));
+
   } catch (err) {
-    console.error(" DB ERROR:", err);
-    process.exit(1);
+    console.error("FATAL ERROR:", err);
   }
 }
 
