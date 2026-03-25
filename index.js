@@ -44,3 +44,10 @@ app.listen(PORT, () => {
 connectDB()
   .then(() => console.log(" DATABASE CONNECTED"))
   .catch((err) => console.error("DB ERROR:", err));
+process.on("uncaughtException", (err) => {
+  console.error("UNCAUGHT EXCEPTION:", err);
+});
+
+process.on("unhandledRejection", (err) => {
+  console.error("UNHANDLED PROMISE:", err);
+});
