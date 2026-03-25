@@ -39,6 +39,10 @@ const crypto = require("crypto");
 
     return { code: 0, msg: "User created successfully"  };
   } catch (error) {
+    console.error("🔥 SERVICE ERROR:", {
+    message: error.message,
+    stack: error.stack,
+  });
     return { code: -500, msg: "Server error",err:error.message,stack:error.stack };
   }
 }
