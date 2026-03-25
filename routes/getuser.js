@@ -6,7 +6,7 @@ const router = express.Router()
 
 
 router.post("/getuser",async(req,res)=>{
-    let db = getDB()
+    let db = await getDB()
     let users = await db.collection("users").findOne({sessionid:req.body.sessionid})
 
     if(!users){

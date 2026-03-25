@@ -7,7 +7,7 @@ const { getDB } = require("../db")
     index = parseInt(index);
     limit = parseInt(limit);
 
-    const db = getDB();
+    const db = await getDB();
     const posts = db.collection("posts");
 
     const data = await posts

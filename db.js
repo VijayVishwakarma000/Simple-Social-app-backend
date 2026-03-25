@@ -1,29 +1,32 @@
-const { MongoClient } = require('mongodb');
+const { MongoClient } = require("mongodb");
 
 const url = process.env.DB;
-const dbName = 'socialapp';
+const dbName = "socialapp";
 
+let client;
 let db;
-let client
+let connectingPromise = null;  
+
 async function connectDB() {
-    if(db) return db
-    try {
-          client = new MongoClient(url);
-        await client.connect();
-        db = client.db(dbName);
-        console.log('Connected to MongoDB');
-        return db;
-    } catch (error) {
-        console.error('MongoDB connection error:', error);
-        throw error;
-    }
+  if (db) return db;
+
+  if (!connectingPromise) {
+    connectingPromise = (async () => {
+      client = new MongoClient(url);
+      await client.connect();
+      db = client.db(dbName);
+      console.log(" MongoDB connected");
+      return db;
+    })();
+  }
+
+  return connectingPromise;
 }
 
-function getDB() {
-    if (!db) {
-        throw new Error('Database not initialized. Call connectDB first.');
-    }
-    return db;
+async function getDB() {
+  if (db) return db;
+
+  return await connectDB();
 }
 
 module.exports = { connectDB, getDB };

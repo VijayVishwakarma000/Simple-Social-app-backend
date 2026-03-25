@@ -9,7 +9,7 @@ const crypto = require("crypto");
       return { code: -1, msg: "Post must have text or image" };
     }
 
-    const db = getDB();
+    const db =await getDB();
     const users = db.collection("users");
     const posts = db.collection("posts");
 
@@ -48,7 +48,7 @@ const crypto = require("crypto");
       return { code: -1, msg: "Missing fields" };
     }
 
-    const db = getDB();
+    const db = await getDB();
     const posts = db.collection("posts");
     const users = db.collection("users");
 
@@ -87,7 +87,7 @@ const crypto = require("crypto");
       return { code: -1, msg: "Missing fields" };
     }
 
-    const db = getDB();
+    const db = await getDB();
     const posts = db.collection("posts");
 
     const post = await posts.findOne({ postId });
@@ -121,7 +121,7 @@ const crypto = require("crypto");
       return { code: -1, msg: "Missing fields" };
     }
 
-    const db = getDB();
+    const db = await getDB();
     const posts = db.collection("posts");
 
     const post = await posts.findOne({ postId });
